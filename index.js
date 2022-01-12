@@ -1,6 +1,8 @@
 const express = require('express');
 const req = require('express/lib/request');
+const { append } = require('express/lib/response');
 const res = require('express/lib/response');
+const { restart } = require('nodemon');
 const app = express();
 const port = 5000;
 
@@ -43,7 +45,15 @@ app.get('/', (req, res) => {
 
 app.get('/users', (req, res) => {
    const name = req.query.name;
-   if(name != undefined){
+   const job = req.query.job;
+
+   if(name != undefined && job != undefined){
+      let result = findUserByNameAndJob(name, job);
+      result = {users_list: result};
+      res.send(result);
+   }
+
+   else if(name != undefined){
       let result = findUserByName(name);
       result = {users_list: result};
       res.send(result)
@@ -52,7 +62,6 @@ app.get('/users', (req, res) => {
       res.send(users);
    }
 });
-
 
 app.get('/users/:id', (req, res) => {
    const id = req.params['id'];
@@ -65,7 +74,33 @@ app.get('/users/:id', (req, res) => {
    }
 });
 
+app.delete('/users', (req, res) => {
+   const id = req.params["id"];
+   deleteUser(id);
+   res.status(200).end();
+});
 
+function deleteUser(id){
+   let result = findUserById(id);
+   if(result != undefined){
+      user = findUserById(id);
+      users['users_list'].remove(user);
+   }
+}
+
+app.post('/users', (req, res) => {
+   const userToAdd = req.body;
+   addUser(userToAdd);
+   res.status(200).end();
+});
+
+function findUserByNameAndJob(name, job){
+   return users['users_list'].filter( (user) => user['name'] === name && user['job'] === job);
+}
+
+function addUser(user){
+   users["users_list"].push(user);
+}
 
 function findUserById(id) {
    return users['users_list'].find( (user) => user['id'] === id); // or line below
