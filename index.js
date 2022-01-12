@@ -74,18 +74,16 @@ app.get('/users/:id', (req, res) => {
    }
 });
 
-app.delete('/users', (req, res) => {
-   const id = req.params["id"];
+app.delete('/users/:id', (req, res) => {
+   const id = req.params['id'];
+   console.log('hello');
    deleteUser(id);
    res.status(200).end();
 });
 
 function deleteUser(id){
-   let result = findUserById(id);
-   if(result != undefined){
-      user = findUserById(id);
-      users['users_list'].remove(user);
-   }
+   const new_users = users['users_list'].filter( (user) => user['id'] != id);
+   users['users_list'] = new_users;
 }
 
 app.post('/users', (req, res) => {
