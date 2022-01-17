@@ -4,6 +4,7 @@ const { append } = require('express/lib/response');
 const res = require('express/lib/response');
 const { restart } = require('nodemon');
 const app = express();
+const cors = require('cors');
 const port = 5000;
 
 /* this the branched version so we can link frontend to backenc*/
@@ -39,6 +40,8 @@ const users = {
        }
     ]
  }
+
+app.use(cors());
 
 app.use(express.json());
 
