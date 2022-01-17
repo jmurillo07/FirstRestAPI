@@ -95,14 +95,20 @@ function deleteUser(id){
 app.post('/users', (req, res) => {
    const userToAdd = req.body;
    addUser(userToAdd);
-   res.status(200).end();
+   // return updated representation of the object I inserted with status code as well.
+   res.status(201).send(userToAdd).end();
 });
 
 function findUserByNameAndJob(name, job){
    return users['users_list'].filter( (user) => user['name'] === name && user['job'] === job);
 }
 
+function generateID(){
+   return Date.now().toString()
+}
+
 function addUser(user){
+   user.id = generateID();
    users["users_list"].push(user);
 }
 
