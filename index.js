@@ -82,14 +82,20 @@ app.get('/users/:id', (req, res) => {
 
 app.delete('/users/:id', (req, res) => {
    const id = req.params['id'];
-   console.log('hello');
+   //console.log('hello');
    deleteUser(id);
-   res.status(200).end();
+   // successful deletion
+   res.status(204).end();
 });
 
 function deleteUser(id){
-   const new_users = users['users_list'].filter( (user) => user['id'] != id);
-   users['users_list'] = new_users;
+   if (id.length == 0 || undefined == findUserById(id)){
+      res.status(404).send('Resource not found.');
+   }
+   else{
+      const new_users = users['users_list'].filter( (user) => user['id'] != id);
+      users['users_list'] = new_users;
+   }
 }
 
 app.post('/users', (req, res) => {
