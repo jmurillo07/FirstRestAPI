@@ -89,6 +89,7 @@ app.delete('/users/:id', (req, res) => {
 });
 
 function deleteUser(id){
+   //resource not found
    if (id.length == 0 || undefined == findUserById(id)){
       res.status(404).send('Resource not found.');
    }
